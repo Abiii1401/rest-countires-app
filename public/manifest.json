@@ -1,0 +1,25 @@
+{
+  "short_name": "World Explorer",
+  "name": "World Explorer - Discover Countries",
+  "icons": [
+    {
+      "src": "global.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "global.png",
+      "type": "image/png",
+      "sizes": "384x384"
+    },
+    {
+      "src": "global.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#4F46E5",
+  "background_color": "#ffffff"
+}
