@@ -13,4 +13,19 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
   })),
+});
+
+// Mock localStorage
+const localStorageMock = (() => {
+  let store = {};
+  return {
+    getItem: jest.fn((key) => store[key]),
+    setItem: jest.fn((key, value) => (store[key] = value)),
+    removeItem: jest.fn((key) => delete store[key]),
+    clear: jest.fn(() => (store = {})),
+  };
+})();
+
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
 }); 

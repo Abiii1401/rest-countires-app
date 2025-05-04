@@ -7,13 +7,20 @@ module.exports = {
       '<rootDir>/__mocks__/fileMock.js',
   },
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
+    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['@babel/preset-env', '@babel/preset-react'] }],
   },
-  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
+  transformIgnorePatterns: [
+    'node_modules/(?!axios)/',
+  ],
+  testPathIgnorePatterns: ['/node_modules/'],
   collectCoverageFrom: [
-    'src/**/*.{js,jsx,ts,tsx}',
-    '!src/**/*.d.ts',
+    'src/**/*.{js,jsx}',
     '!src/index.js',
     '!src/reportWebVitals.js',
+    '!src/setupTests.js',
+  ],
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    '/__tests__/',
   ],
 }; 

@@ -5,19 +5,30 @@ import FilterDropdown from '../components/FilterDropdown';
 import { getAllCountries } from '../services/api';
 
 const Home = () => {
-  const [countries, setCountries] = useState([]);
+  const [allCountries, setAllCountries] = useState([]);
+  const [filteredCountries, setFilteredCountries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentRegion, setCurrentRegion] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchCountries();
   }, []);
 
+  // Update filtered countries whenever region or search term changes
+  useEffect(() => {
+    if (allCountries.length > 0) {
+      const filtered = applyFilters(allCountries, currentRegion, searchTerm);
+      setFilteredCountries(filtered);
+    }
+  }, [allCountries, currentRegion, searchTerm]);
+
   const fetchCountries = async () => {
     try {
       setLoading(true);
       const data = await getAllCountries();
-      setCountries(data);
+      setAllCountries(data);
       setError(null);
     } catch (err) {
       setError('Failed to fetch countries. Please try again later.');
@@ -26,36 +37,30 @@ const Home = () => {
     }
   };
 
-  const handleSearch = async (searchTerm) => {
-    try {
-      setLoading(true);
-      const data = await getAllCountries();
-      const filteredCountries = data.filter(country =>
-        country.name.common.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setCountries(filteredCountries);
-      setError(null);
-    } catch (err) {
-      setError('Failed to search countries. Please try again later.');
-    } finally {
-      setLoading(false);
+  const applyFilters = (countries, region, search) => {
+    let result = [...countries];
+
+    // First apply region filter
+    if (region) {
+      result = result.filter(country => country.region === region);
     }
+
+    // Then apply search filter within the region-filtered results
+    if (search) {
+      result = result.filter(country =>
+        country.name.common.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    return result;
   };
 
-  const handleFilter = async (region) => {
-    try {
-      setLoading(true);
-      const data = await getAllCountries();
-      const filteredCountries = region
-        ? data.filter(country => country.region === region)
-        : data;
-      setCountries(filteredCountries);
-      setError(null);
-    } catch (err) {
-      setError('Failed to filter countries. Please try again later.');
-    } finally {
-      setLoading(false);
-    }
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  };
+
+  const handleFilter = (region) => {
+    setCurrentRegion(region);
   };
 
   const handleRetry = () => {
@@ -66,7 +71,7 @@ const Home = () => {
     <main className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-12">
         <SearchBar onSearch={handleSearch} />
-        <FilterDropdown onFilter={handleFilter} />
+        <FilterDropdown onFilter={handleFilter} currentRegion={currentRegion} />
       </div>
 
       {loading ? (
@@ -89,18 +94,26 @@ const Home = () => {
             Try Again
           </button>
         </div>
-      ) : countries.length === 0 ? (
+      ) : filteredCountries.length === 0 ? (
         <div className="text-center py-20">
           <div className="inline-block p-4 bg-gray-100 dark:bg-gray-800 rounded-full mb-4">
             <svg className="w-12 h-12 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <p className="text-gray-600 dark:text-gray-300 text-lg">No countries found. Try adjusting your search or filter.</p>
+          <p className="text-gray-600 dark:text-gray-300 text-lg">
+            {searchTerm && currentRegion
+              ? `No countries found matching "${searchTerm}" in ${currentRegion}`
+              : searchTerm
+              ? `No countries found matching "${searchTerm}"`
+              : currentRegion
+              ? `No countries found in ${currentRegion}`
+              : 'No countries found'}
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {countries.map((country) => (
+          {filteredCountries.map((country) => (
             <CountryCard key={country.cca3} country={country} />
           ))}
         </div>
