@@ -13,22 +13,22 @@ function CountryDetails() {
     fetchCountryDetails();
   }, [code]);
 
-  const fetchCountryDetails = async () => {
-    try {
+    const fetchCountryDetails = async () => {
+      try {
       setLoading(true);
       setError(null);
-      const data = await getCountryDetails(code);
+        const data = await getCountryDetails(code);
       if (!data) {
         throw new Error('Country not found');
       }
-      setCountry(data);
-    } catch (err) {
+        setCountry(data);
+      } catch (err) {
       setError(err.message || 'Failed to fetch country details. Please try again.');
       setCountry(null);
     } finally {
-      setLoading(false);
-    }
-  };
+        setLoading(false);
+      }
+    };
 
   const handleRetry = () => {
     fetchCountryDetails();
@@ -110,34 +110,34 @@ function CountryDetails() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8">
         <button
           onClick={() => navigate('/')}
           className="mb-16 px-6 py-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center gap-2"
-        >
-          <svg
+      >
+        <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
             viewBox="0 0 20 20"
             fill="currentColor"
-          >
-            <path
+        >
+          <path
               fillRule="evenodd"
               d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
               clipRule="evenodd"
-            />
-          </svg>
-          Back
+          />
+        </svg>
+        Back
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <div className="w-full h-80 lg:h-96 rounded-xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-300">
-            <img
-              src={flags.png}
+          <img
+            src={flags.png}
               alt={name.common}
               className="w-full h-full object-cover"
-            />
-          </div>
+          />
+        </div>
 
           <div className="text-gray-900 dark:text-white">
             <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -152,29 +152,29 @@ function CountryDetails() {
                 </p>
                 <p className="text-lg">
                   <span className="font-semibold text-blue-600 dark:text-blue-400">Population:</span>{' '}
-                  {population.toLocaleString()}
-                </p>
+                {population.toLocaleString()}
+              </p>
                 <p className="text-lg">
                   <span className="font-semibold text-blue-600 dark:text-blue-400">Region:</span> {region}
-                </p>
+              </p>
                 <p className="text-lg">
                   <span className="font-semibold text-blue-600 dark:text-blue-400">Sub Region:</span> {subregion || 'N/A'}
-                </p>
+              </p>
                 <p className="text-lg">
                   <span className="font-semibold text-blue-600 dark:text-blue-400">Capital:</span> {capital?.[0] || 'N/A'}
-                </p>
-              </div>
+              </p>
+            </div>
 
               <div className="space-y-4">
                 <p className="text-lg">
                   <span className="font-semibold text-blue-600 dark:text-blue-400">Top Level Domain:</span>{' '}
-                  {tld?.[0] || 'N/A'}
-                </p>
+                {tld?.[0] || 'N/A'}
+              </p>
                 <p className="text-lg">
                   <span className="font-semibold text-blue-600 dark:text-blue-400">Currencies:</span>{' '}
                   {currencies
                     ? Object.values(currencies)
-                        .map((currency) => currency.name)
+                  .map((currency) => currency.name)
                         .join(', ')
                     : 'N/A'}
                 </p>
@@ -183,26 +183,26 @@ function CountryDetails() {
                   {languages
                     ? Object.values(languages).join(', ')
                     : 'N/A'}
-                </p>
-              </div>
+              </p>
             </div>
+          </div>
 
-            {borders && borders.length > 0 && (
-              <div>
+          {borders && borders.length > 0 && (
+            <div>
                 <h2 className="text-2xl font-semibold mb-6 text-blue-600 dark:text-blue-400">Border Countries:</h2>
                 <div className="flex flex-wrap gap-3">
                   {borders.map((borderCode) => (
-                    <Link
+                  <Link
                       key={borderCode}
                       to={`/country/${borderCode}`}
                       className="px-6 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:scale-105"
                     >
                       {borderCode}
-                    </Link>
-                  ))}
-                </div>
+                  </Link>
+                ))}
               </div>
-            )}
+            </div>
+          )}
           </div>
         </div>
       </div>
