@@ -65,4 +65,6 @@ npm test
 
 ## Deployment
 
-The application can be deployed on Vercel or Netlify. The deployment link will be added here once available.
+The application has been deployed on Netlify.
+
+**Live Demo:** [https://gilded-strudel-100b24.netlify.app/](https://gilded-strudel-100b24.netlify.app/)
